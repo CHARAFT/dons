@@ -58,12 +58,12 @@
 									        <input type="text" id="nom" name="nom" required><br>
 									
 									        <label for="email">Email :</label>
-									        <input type="email" id="email" name="email" required><br>
+									        <input type="text" id="email" name="email" required><br>
 									
 									        <!-- Ajoutez d'autres champs si nécessaire -->
 									
 									        <input type="hidden" name="action" value="inviter">
-									        <input type="submit" value="Inviter">
+									        <input type="submit" class="btn btn-primary" value="Inviter">
 									    </form>     </div>
 					            <div class="modal-footer">
 					                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

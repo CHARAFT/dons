@@ -60,7 +60,7 @@ public class RegisterServlet extends HttpServlet {
 				
 				
 				int rowCount = pst.executeUpdate();
-				dispatcher = request.getRequestDispatcher("Registration/registration.jsp");
+				dispatcher = request.getRequestDispatcher("Registration/auth.jsp");
 				
 			
 				if (rowCount > 0) {

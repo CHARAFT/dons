@@ -8,6 +8,8 @@ public class Demande {
 	private String desc;
 	private int quantite;
 	private String nature;
+	private int status;
+	
 	public Demande(String objet, String desc, int quantite, String nature, Date date) {
 		super();
 		this.objet = objet;
@@ -31,6 +33,18 @@ public class Demande {
 		this.quantite = quantite;
 		this.nature = nature;
 		this.date = date;
+	}
+	/**
+	 * @return the status
+	 */
+	public int getStatus() {
+		return status;
+	}
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	/**
 	 * @return the id

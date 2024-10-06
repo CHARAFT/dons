@@ -54,8 +54,11 @@
 							<div class="form-group">
 							
 							 <select name="role">
-                         	<option value="USER">User</option>
+                         	<option value="transporteur">transporteur</option>
             				<option value="ADMIN">Admin</option>
+            				<option value="beneficiaire">beneficiaire</option>
+            				<option value="donateur">donateur</option>
+            				
         					</select><br></div>
 							<div class="form-group">
 								<input type="checkbox" name="agree-term" id="agree-term"

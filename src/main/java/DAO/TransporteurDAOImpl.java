@@ -141,7 +141,7 @@ public class TransporteurDAOImpl implements TransporteurDAO{
 
         return transporteurs;
     }
-	public void sendEmail(String to ) {
+	public void sendEmail(String to , String passwd) {
 	    // Remplacez ces valeurs par les vôtres
 	    String username = "tatataii2002@gmail.com";
 	    String password = "litcxxfidzhajook";
@@ -163,7 +163,7 @@ public class TransporteurDAOImpl implements TransporteurDAO{
 	        message.setFrom(new InternetAddress(username));
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 	        message.setSubject("Invitation au service de transport");
-	        message.setText("Bonjour,\n\nVous êtes invité à rejoindre notre service de transport.");
+	        message.setText("Bonjour,\n\nVous êtes invité à rejoindre notre service de transport. Votre mot de passe est "+ passwd);
 
 	        Transport.send(message);
 

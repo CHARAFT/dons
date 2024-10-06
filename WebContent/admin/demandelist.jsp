@@ -49,14 +49,31 @@
 				                    <td>${demande.quantite}</td>
 				                    <td>${demande.nature}</td>
 				                    <td>${demande.date}</td>
-				                    <td> <i class="fa-solid fa-toggle-on" style="color: #24cf02;"></i></td>
-				                    <!-- Ajoutez d'autres colonnes si nécessaire -->
+				                    <td><c:choose>
+							                <c:when test="${demande.status eq 0}"><span class="status process">En attente</span></c:when>
+							                <c:when test="${demande.status eq 1}"><span class="status final">confirmé</span></c:when>
+							                <c:otherwise>Unknown</c:otherwise>
+							            </c:choose>
+					            	</td>
+				                    <td>
+				                    <c:if test="${demande.status eq 0}">
+				                    
+									    <form id="statusForm" action="/dons/DemandeServlet?action=editer&id=${demande.id}&status=${demande.status}" method="post">
+									        <input type="hidden" name="donId" value="${demande.id}">
+									        
+									        <!-- Toggle switch -->
+									        <input type="checkbox" id="toggle-status" name="status" data-don-id="${demande.id}" onchange="submitForm()">
+									    </form></c:if>
+									</td>
 				                </tr>
 				            </c:forEach>
 				        </tbody>
 				    </table>
 </div>
-    <!-- Ajoutez des liens de pagination ou d'autres fonctionnalités selon vos besoins -->
-
+<script>
+        function submitForm() {
+            document.getElementById('statusForm').submit();
+        }
+    </script>
 </body>
 </html>

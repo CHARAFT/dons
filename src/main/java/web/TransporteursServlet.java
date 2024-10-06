@@ -1,6 +1,7 @@
 package web;
 
 import jakarta.servlet.ServletException;
+
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,13 +12,17 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import DAO.EventDAO;
 import DAO.EventDAOImpl;
+import DAO.UserDAO;
+import DAO.UserDAOImpl;
 import DAO.TransporteurDAO;
 import DAO.TransporteurDAOImpl;
 import entities.Event;
 import entities.Transporteur;
+import entities.User;
 
 /**
  * Servlet implementation class TransporteursServlet
@@ -111,15 +116,20 @@ public class TransporteursServlet extends HttpServlet {
 	            // Récupérer les données du formulaire
 	            String nom = request.getParameter("nom");
 	            String email = request.getParameter("email");
-String type_tr="";
-String ville = "";
+				String type_tr="";
+				String ville = "";
 	            // Envoie de l'e-mail (remplacez ceci par votre logique d'envoi d'e-mail)
 	            // Utilisez une bibliothèque comme JavaMail pour envoyer l'e-mail
 
 	            // Ajouter le transporteur à la base de données
-	            String password = null;
+	            String password = generateRandomPassword();
+	            String role = "transporteur";
+	            String mobile ="";
 	            Transporteur transporteur = new Transporteur(nom,type_tr,ville,eventID);
-	            transporteurDAO.sendEmail(email);
+	            transporteurDAO.sendEmail(email,password);
+	            User user= new User(nom,email,password,mobile,role);
+	            UserDAO userDAO =new UserDAOImpl(conn);
+	            userDAO.insert(user);
 	            // Redirection vers une page de confirmation ou autre
 	            transporteurDAO.insert(transporteur);
 	            response.sendRedirect("admin/base.jsp?action=listtr");
@@ -134,5 +144,17 @@ String ville = "";
 	        e.printStackTrace();
 	        response.sendRedirect("erreur.jsp");
 	    }	}
+	private String generateRandomPassword() {
+        // Generate a random password logic (replace this with your own logic)
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        int length = 10;
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
 
+        for (int i = 0; i < length; i++) {
+            password.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return password.toString();
+    }
 }

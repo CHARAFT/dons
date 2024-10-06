@@ -138,30 +138,14 @@ public class DemandeServlet extends HttpServlet {
            
            
         } else if (action.equals("editer")) {
-            // Récupérer les données du formulaire d'édition
-           
-
-           
-	            Date date;
-	            
-				try {
-					 int demandeId = Integer.parseInt(request.getParameter("demandeId"));
-
-					 String desc = request.getParameter("description");
-					 String objet = request.getParameter("objet");
-					 int qu= Integer.parseInt(request.getParameter("quantite"));
-					 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					date = dateFormat.parse(request.getParameter("date"));
-		            String nature = request.getParameter("nature");
-		            Demande newdemande = new Demande (objet, desc, qu,  nature,date);
-		            response.sendRedirect("DemandeServlet?action=listev");
+            
+					 int demandeId = Integer.parseInt(request.getParameter("id"));
+					 int status = 1;
+					 response.sendRedirect("DemandeServlet?action=listdem");
 		            // Ajouter le freelancer à la base de données
-		            demDAO.insert(newdemande);
+		            demDAO.update(status,demandeId);
 
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
         }
 	}
 

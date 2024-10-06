@@ -29,7 +29,7 @@
 						<i class='bx bx-search' ></i>
 						<i class='bx bx-filter' ></i>
 					</div>
-					<form action="/dons/DonServlet" method="post">
+					<form action="/dons/DonServlet?action=selecttrans" method="post">
 					<table>
 						<thead>
 						

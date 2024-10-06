@@ -8,6 +8,6 @@ public interface DemandeDAO {
 	Demande getById(int id);
     List<Demande> getAll();
     void insert(Demande demande);
-    void update(Demande demande);
+    void update(int sta,int id);
     void delete(int id);
 }

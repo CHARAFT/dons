@@ -34,6 +34,7 @@ private Connection connection;
             	dem.setNature(resultSet.getString("nature"));
             	dem.setQuantite(resultSet.getInt("quantite"));
             	dem.setDate(resultSet.getDate("date"));
+            	dem.setStatus(resultSet.getInt("status"));
 
             }
         } catch (SQLException e) {
@@ -46,7 +47,7 @@ private Connection connection;
 	@Override
 	public List<Demande> getAll() {
 		List<Demande> dems = new ArrayList<>();
-        String sql = "SELECT * FROM Demande";
+        String sql = "SELECT * FROM demande";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -58,7 +59,7 @@ private Connection connection;
             	dem.setNature(resultSet.getString("nature"));
             	dem.setQuantite(resultSet.getInt("quantite"));
             	dem.setDate(resultSet.getDate("date"));
-
+            	dem.setStatus(resultSet.getInt("status"));
 
                 dems.add(dem);
                 
@@ -87,16 +88,15 @@ private Connection connection;
 	}
 
 	@Override
-	public void update(Demande demande) {
-		String sql = "UPDATE demande SET objet=?, description=? , nature=?, quantite=?, date=? WHERE id = ?";
+	public void update(int status,int id) {
+		String sql = "UPDATE demande SET status=? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-        	statement.setString(4, demande.getNature());
-            statement.setString(1, demande.getObjet());
-            statement.setString(2, demande.getDesc());
-            statement.setInt(3, demande.getQuantite());
-            statement.setDate(5, (Date) demande.getDate());
-            statement.setInt(6, demande.getId());
+       
+            statement.setInt(1, status);
+            statement.setInt(2, id);
+
+            
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

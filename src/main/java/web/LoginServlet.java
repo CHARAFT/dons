@@ -34,18 +34,26 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String action = request.getParameter("action");
+
+		if ("logout".equals(action)) {
+	        // Logique de déconnexion
+	        HttpSession session = request.getSession();
+	        session.invalidate();
+	        response.sendRedirect("Registration/auth.jsp");
+	    }
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String uemail = request.getParameter("username");
 		String upwd = request.getParameter("password");
+
 		HttpSession session = request.getSession();
-		RequestDispatcher dispatcher = null;
+
 		Connection conn = null; 
 		try {
 			conn = Getconnexion.getConnection(); 
@@ -55,14 +63,19 @@ public class LoginServlet extends HttpServlet {
 			
 			ResultSet rs = pst.executeQuery();
 			if(rs.next()) {
-				session.setAttribute("name",rs.getString("uname"));
-				dispatcher = request.getRequestDispatcher("admin/base.jsp");
+
+				 String role = rs.getString("role");
+				 int user_id = rs.getInt("id"); // Récupérer l'ID de l'utilisateur
+                 session.setAttribute("user_id", user_id); // Définir l'attribut "user_id" dans la session
+
+ 				session.setAttribute("name",rs.getString("uname"));
+                 redirectToDashboard(response, role);
 			}else {
 				request.setAttribute("status","failed");
-				dispatcher = request.getRequestDispatcher("Registration/login.jsp");
+				request.getRequestDispatcher("Registration/login.jsp").forward(request, response);
 			
 			}
-			dispatcher.forward(request, response);
+			
 		 } catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -74,6 +87,27 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 
-	}
+}
+	  private void redirectToDashboard(HttpServletResponse response, String role) throws IOException {
+	        // Redirection vers le tableau de bord approprié
+	        switch (role) {
+	            case "transporteur":
+	            	
+	                response.sendRedirect("/dons/transporteur/base.jsp");
+	                break;
+	            case "beneficiaire":
+	                response.sendRedirect("/beneficiaire_dashboard.jsp");
+	                break;
+	            case "donateur":
+	                response.sendRedirect("/dons/donateur/donateur_dashboard.jsp");
+	                break;
+	            
+	            default:
+	              
+	                response.sendRedirect("admin/base.jsp");
+	        }
+	    }
+
+	
 
 }

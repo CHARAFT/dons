@@ -20,28 +20,36 @@
 </head>
 <body>
 
-
+<%
+    HttpSession sessio = request.getSession();
+    if (!sessio.isNew()) {
+        int user_id = (int) sessio.getAttribute("user_id");
+             
+    }
+   
+%>
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<i class='bx bxs-smile'></i>
-			<span class="text">DonateApp</span>
+						<img src="/dons/admin/images/logo1.png" style="height:40px; wieght:40px'"/>
+
+			<span class="text">GivingLink</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="<%= (request.getParameter("action") == null) ? "active" : "" %>">
-				<a href="/dons/admin/base.jsp">
+				<a href="/dons/transporteur/base.jsp">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li class="<%= (request.getParameter("action") != null && request.getParameter("action").equals("listev")) ? "active" : "" %>">
-				<a href="/dons/EventServlet?action=listev">
+			<li class="<%= (request.getParameter("action") != null && request.getParameter("action").equals("evt")) ? "active" : "" %>">
+				<a href="/dons/EventServlet?action=evt">
 					<i class="fa fa-solid fa-calendar-check"></i>
 					<!-- <i class='bx bxs-calendar-check' ></i> -->
-					<span class="text">Mes Events</span>
+					<span class="text"> Events</span>
 				</a>
-			<li class="<%= (request.getParameter("action") != null && request.getParameter("action").equals("listdon")) ? "active" : "" %>">
-				<a href="/dons/DonServlet?action=listdon">
+			<li class="<%= (request.getParameter("action") != null && request.getParameter("action").equals("listdons")) ? "active" : "" %>">
+				<a href="/dons/DonServlet?action=listdons&id=${user_id}">
 					<i class="fa fa-solid fa-hand-holding-medical"></i>
 					<!-- <i class='bx bxs-group' ></i> -->
 					<span class="text">Dons</span>
@@ -56,7 +64,8 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="/dons/LoginServlet?action=logout" class="logout">
+				
 					<i class='bx bxs-log-out-circle' ></i>
 					<span class="text">Logout</span>
 				</a>
@@ -87,7 +96,7 @@
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="imgm/people.png">
+				<img src="images/logo1.png">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
@@ -96,7 +105,7 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
+					
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
@@ -105,7 +114,7 @@
 						<li>
 							<a class="active" href="#">
 							 <% String action = request.getParameter("action");
-					           if ("listev".equals(action)) { %>
+					           if ("evt".equals(action)) { %>
 					               Events
 					        <% } else if ("listdem".equals(action)) { %>
 					               Demandes
@@ -113,7 +122,7 @@
 					               Donateurs
 					        <% } else if ("listtr".equals(action)) { %>
 					               Agences de transporteur
-					        <% } else if ("listdon".equals(action)) { %>
+					        <% } else if ("listdons".equals(action)) { %>
 					               Dons
 					        <% } else { %>
 					               Home
@@ -124,7 +133,7 @@
 				</div>
 				
 			</div>
-
+<% if (action==null){ %>
 			<ul class="box-info">
 				<li>
 					<i class='bx bxs-calendar-check' ></i>
@@ -148,11 +157,12 @@
 					</span>
 				</li>
 			</ul>
-     <%  if ("listev".equals(action)) {  %>
+			<%} %>
+     <%  if ("evt".equals(action)) {  %>
 			<%@ include file="eventlist.jsp" %>
 			<% } %>
-			<%  if ("listdon".equals(action)) {  %>
-			<%@ include file="donlist.jsp" %>
+			<%  if ("listdons".equals(action)) {  %>
+			<%@ include file="dons.jsp" %>
 			<% } %>
 		</main>
 		<!-- MAIN -->
@@ -160,7 +170,7 @@
 	<!-- CONTENT -->
 	
 
-	<script src="script.js"></script>
+	<script src="/dons/admin/script.js"></script>
 	<script src="https://kit.fontawesome.com/68ee66ea75.js" crossorigin="anonymous"></script>
 
 </body>

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +12,14 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
+<link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.28.2/dist/apexcharts.min.css">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.2/dist/apexcharts.min.js"></script>
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
@@ -20,12 +29,25 @@
 </head>
 <body>
 
+<%
+    List<Event> event = (List<Event>) session.getAttribute("events");
+List<Don> don = (List<Don>) session.getAttribute("dons");
+List<Demande> demande = (List<Demande>) session.getAttribute("demandes");
+List<Donateur> donateur = (List<Donateur>) session.getAttribute("donateurs");
+
+  int eventCount = (event != null) ? event.size() : 0;
+   int donCount = (don != null) ? don.size() : 0;
+   int demandeCount = (demande != null) ? demande.size() : 0;
+   int donateurCount = (donateur != null) ? donateur.size() : 0;
+   request.setAttribute("don", don);
+%>
+		<c:set var="donations" value="${don}" />
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<i class='bx bxs-smile'></i>
-			<span class="text">DonateApp</span>
+			<img src="images/logo1.png" style="height:40px; wieght:40px'"/>
+			<span class="text">GivingLink</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="<%= (request.getParameter("action") == null) ? "active" : "" %>">
@@ -76,7 +98,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="/dons/LoginServlet?action=logout" class="logout">
 					<i class='bx bxs-log-out-circle' ></i>
 					<span class="text">Logout</span>
 				</a>
@@ -92,7 +114,6 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
-			<a href="#" class="nav-link">Categories</a>
 			
 			<form action="#">
 				<div class="form-input">
@@ -107,7 +128,7 @@
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="imgm/people.png">
+				<img src="images/logo1.png">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
@@ -116,10 +137,9 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Dashboard</a>
+							<a href="#">Dashboard </a>
 						</li>
 						<li><i class='bx bx-chevron-right' ></i></li>
 						<li>
@@ -144,30 +164,35 @@
 				</div>
 				
 			</div>
-
+<%if (action == null){ %>
 			<ul class="box-info">
 				<li>
 					<i class='bx bxs-calendar-check' ></i>
 					<span class="text">
-						<h3>10</h3>
+						<h3><%= eventCount %></h3>
 						<p> Current Events</p>
 					</span>
 				</li>
 				<li>
 					<i class='bx bxs-group' ></i>
 					<span class="text">
-						<h3>28</h3>
+						<h3><%= demandeCount %></h3>
 						<p>Demandes</p>
 					</span>
 				</li>
 				<li>
 					<i class='bx bxs-dollar-circle' ></i>
 					<span class="text">
-						<h3>254</h3>
+						<h3><%= donateurCount %></h3>
 						<p>Donateurs</p>
 					</span>
 				</li>
+				
+				
 			</ul>
+			<div class="chart">
+            	<div id="donationChart"></div>
+			</div><%} %>
      <%  if ("listev".equals(action)) {  %>
 			<%@ include file="eventslist.jsp" %>
 			<% } %>
@@ -191,6 +216,62 @@
 
 	<script src="script.js"></script>
 	<script src="https://kit.fontawesome.com/68ee66ea75.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	
+	<script>
+    // Extracting donation data for ApexCharts
+    var donationData = [];
+
+    <c:forEach var="donation" items="${donations}">
+        // Assuming each donation has an 'event_id' property
+        donationData.push({
+            event: ${donation.event_id},
+        });
+    </c:forEach>
+    // Counting donations per event
+    var donationsPerEvent = {};
+
+    donationData.forEach(function (donation) {
+        var eventId = donation.event;
+        donationsPerEvent[eventId] = (donationsPerEvent[eventId] || 0) + 1;
+    });
+
+    // Prepare data for ApexCharts
+    var chartData = [];
+    Object.keys(donationsPerEvent).forEach(function (eventId) {
+        chartData.push({
+            x: "Event " + eventId,
+            y: donationsPerEvent[eventId]
+        });
+    });
+
+    // ApexCharts configuration
+    var chartOptions = {
+        series: [{
+            data: chartData
+        }],
+        chart: {
+            height: 350,
+            type: 'bar'
+        },
+        xaxis: {
+            type: 'category',
+            categories: Object.keys(donationsPerEvent).map(function (eventId) {
+                return "Event " + eventId;
+            })
+        },
+        yaxis: {
+            title: {
+                text: 'Number of Donations'
+            }
+        }
+    };
+
+    // Render ApexCharts
+    var donationChart = new ApexCharts(document.querySelector("#donationChart"), chartOptions);
+    donationChart.render();
+</script>
+
 
 </body>
 </html>

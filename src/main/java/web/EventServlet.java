@@ -80,14 +80,27 @@ public class EventServlet extends HttpServlet {
 			String action = request.getParameter("action");
 
 	        if (action == null || action.equals("listev")) {
-	            // Liste des freelancers
+	         
 		        List<Event> events = eventDAO.getAll();
 		        request.getSession().setAttribute("events", events);
+		        System.out.println(events);
 //	            request.getRequestDispatcher("admin/base.jsp?action=list").forward(request, response);
 	            response.sendRedirect("admin/base.jsp?action=listev");
 	    		response.getWriter().append("Served at: ").append(request.getContextPath());
 
-	        } else if (action.equals("ajout")) {
+	        }else if (action.equals("evt")) {
+	        	
+		        List<Event> events = eventDAO.getAll();
+		        request.getSession().setAttribute("events", events);
+		        System.out.println(events);
+	            response.sendRedirect("transporteur/base.jsp?action=evt");
+	        }else if (action.equals("donatevent")) {
+	        	 List<Event> events = eventDAO.getAll();
+			        request.getSession().setAttribute("events", events);
+//		            request.getRequestDispatcher("admin/base.jsp?action=list").forward(request, response);
+		            response.sendRedirect("donateur/donateur_dashboard.jsp");
+		    		response.getWriter().append("Served at: ").append(request.getContextPath());
+		    }else if (action.equals("ajout")) {
 	            // Afficher le formulaire d'ajout de freelancer
 	            request.getRequestDispatcher("ajouter-event.jsp").forward(request, response);
 	        } else if (action.equals("edit")) {

@@ -41,7 +41,7 @@
 						<thead>
 							<tr>
 								<th>Nom</th>
-								<th>CIN<th>
+								<th>CIN</th>
 								<th>Email</th>
 								<th>Addresse</th>
 								<th>Numero de téléphone</th>
@@ -57,11 +57,10 @@
                     <td>${donateur.email}</td>
 					<td>${donateur.address}</td>                    
 					<td>${donateur.num_tel}</td>
-					<td><!-- Ajoutez des liens ou des boutons pour les actions -->
-                <a href="#" class="document-details-button" data-toggle="modal" data-target="#view-donor-modal-${donateur.id}"><i class="fa-solid fa-eye"></i></a>
-                
-                <a href="/dons/DonateurServlet?id=${donateur.id}&action=supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce donnateur ?')"><i class="fa-solid fa-trash"></i></a>
-            </td>
+					<td>
+		                <a href="#" class="document-details-button" data-toggle="modal" data-target="#view-donor-modal-${donateur.id}"><i class="fa-solid fa-eye"></i></a>
+		                <a href="/dons/DonateurServlet?id=${donateur.id}&action=supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce donnateur ?')"><i class="fa-solid fa-trash"></i></a>
+		            </td>
                 </tr>
                 <div class="modal fade" id="view-donor-modal-${donateur.id}" tabindex="-1" role="dialog" aria-labelledby="view-donor-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

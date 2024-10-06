@@ -8,5 +8,5 @@ public interface TransporteurDAO {
     void insert(Transporteur transporteur);
     void delete(int id);
 	List<Transporteur> getTransporteursByEvent(int eventId);
-	void sendEmail(String to ) ;
+	void sendEmail(String to , String psswd) ;
 }
